@@ -8,6 +8,8 @@ import {
   completenessScorer,
   translationScorer,
 } from "./scorers/weather-scorer";
+import { VercelDeployer } from "@mastra/deployer-vercel";
+
 
 export const mastra = new Mastra({
   workflows: { weatherWorkflow },
@@ -33,4 +35,5 @@ export const mastra = new Mastra({
     // Enables DefaultExporter and CloudExporter for AI tracing
     default: { enabled: true },
   },
+  deployer: new VercelDeployer(),
 });
