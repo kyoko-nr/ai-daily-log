@@ -1,8 +1,7 @@
 import { Agent } from "@mastra/core/agent";
-import { Memory } from "@mastra/memory";
 import { LibSQLStore } from "@mastra/libsql";
+import { Memory } from "@mastra/memory";
 import { weatherTool } from "../tools/weather-tool";
-import { scorers } from "../scorers/weather-scorer";
 
 export const weatherAgent = new Agent({
   name: "Weather Agent",
@@ -22,29 +21,7 @@ export const weatherAgent = new Agent({
 `,
   model: "openai/gpt-4o-mini",
   tools: { weatherTool },
-  scorers: {
-    toolCallAppropriateness: {
-      scorer: scorers.toolCallAppropriatenessScorer,
-      sampling: {
-        type: "ratio",
-        rate: 1,
-      },
-    },
-    completeness: {
-      scorer: scorers.completenessScorer,
-      sampling: {
-        type: "ratio",
-        rate: 1,
-      },
-    },
-    translation: {
-      scorer: scorers.translationScorer,
-      sampling: {
-        type: "ratio",
-        rate: 1,
-      },
-    },
-  },
+
   memory: new Memory({
     storage: new LibSQLStore({
       url: "file:../mastra.db", // path is relative to the .mastra/output directory
