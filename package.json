@@ -6,8 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
+    "fix": "npm run __lint && npm run __format",
+    "__lint": "biome lint --write && tsc --noEmit",
+    "__format": "biome format --write"
   },
   "dependencies": {
     "next": "16.0.10",
