@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "mastra dev",
     "build": "mastra build",
-    "start": "mastra start"
+    "start": "mastra start",
+    "fix": "npm run __lint && npm run __format",
+    "__lint": "biome lint --write && tsc --noEmit",
+    "__format": "biome format --write"
   },
   "keywords": [],
   "author": "",
@@ -17,16 +19,17 @@
     "node": ">=22.13.0"
   },
   "dependencies": {
-    "@mastra/core": "^0.24.8",
-    "@mastra/evals": "^0.14.4",
-    "@mastra/libsql": "^0.16.4",
-    "@mastra/loggers": "^0.10.19",
-    "@mastra/memory": "^0.15.13",
-    "zod": "^4.2.0"
+    "@mastra/core": "0.24.8",
+    "@mastra/evals": "0.14.4",
+    "@mastra/libsql": "0.16.4",
+    "@mastra/loggers": "0.10.19",
+    "@mastra/memory": "0.15.13",
+    "zod": "4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^25.0.2",
-    "mastra": "^0.18.8",
-    "typescript": "^5.9.3"
+    "@biomejs/biome": "2.3.8",
+    "@types/node": "25.0.2",
+    "mastra": "0.18.8",
+    "typescript": "5.9.3"
   }
 }
