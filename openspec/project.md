@@ -6,11 +6,12 @@
 アイデア蓄積を支援します。
 
 ## 技術スタック
-- Next.js 16 (App Router) + React 19
+- Next.js 16 (Vercel) + React 19
 - TypeScript (strict)
 - Tailwind CSS v4 + PostCSS
-- Mastra (AI agents/tools/workflows)
-- @mastra/libsql (libSQL/SQLite)
+- Supabase (Auth + Postgres + RLS)
+- Mastra (Next Route Handler 内で実行)
+- 週次/月次ジョブ: Vercel Cron (将来は別ワーカーに移行する可能性あり)
 - Zod (スキーマ検証)
 - Biome (lint/format)
 
@@ -24,8 +25,10 @@
 ### アーキテクチャ
 - `src/app` に App Router を配置。Server Components を基本とする。
 - AI ワークフローは `src/mastra` に集約 (agents/tools/index)。
-- Mastra のストレージは libSQL を使用。必要に応じて in-memory と
-  file/remote を切り替える。
+- Mastra は Next.js の Route Handler 内で実行する。
+- データは Supabase Postgres に保存し、RLS でアクセス制御する。
+- 週次/月次サマリーは Vercel Cron で起動し、将来は別ワーカーに移行する
+  可能性がある。
 
 ### テスト方針
 - まだテストフレームワークは未導入。
@@ -52,7 +55,7 @@
 - 週次・月次サマリーは Web UI とメールの両方で閲覧可能にする。
 
 ## 外部依存
-- LLM プロバイダ (Mastra 経由、TBD)
+- LLM プロバイダ: OpenAI (Mastra 経由)
 - レポート配信用のメールサービス (TBD)
-- 認証/認可の外部サービス (TBD)
-- libSQL/SQLite via @mastra/libsql (開発時は in-memory)
+- Supabase (Auth + Postgres + RLS)
+- Vercel (ホスティング + Cron)
