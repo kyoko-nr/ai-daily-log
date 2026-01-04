@@ -46,7 +46,14 @@
 ## コーディング/品質
 - Biome 準拠 (2スペース、80文字、ダブルクォート、セミコロン、末尾カンマ)
 - `@/*` エイリアスで `src/*` を参照する
-- テストフレームワークは未導入。現状の品質ゲートは `npm run __lint`
+- export する型/関数/interface には日本語の JSDoc を付ける
+- ファイル名: コンポーネントは UpperCamelCase、hooks は lowerCamelCase の
+  `xxxHooks`、その他は lowerCamelCase
+- 命名: atom は `xxAtom`、action は `xxAction`
+- コンポーネントは表示のみを担当し、atom/state/関数は hooks に置く
+- ルールと矛盾する指示があれば必ず意図を確認する
+- jotai の atom/action は必ず `**/state` ディレクトリに配置する
+- テストフレームワークは未導入。現状の品質ゲートは `npm run fix`
 
 ## データ/AI の注意
 - サマリーは保存済みログ/Q&A に基づき、捏造しない

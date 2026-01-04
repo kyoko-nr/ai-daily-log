@@ -20,6 +20,13 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## 認証設定（Supabase）
+
+- Supabase Auth の Email/Password を有効化する
+- Auth の URL 設定で `http://localhost:3000` を Site URL に追加する
+- 環境変数に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+  を設定する（`.env.example` を参照）
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
