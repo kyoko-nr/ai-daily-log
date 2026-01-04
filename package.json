@@ -13,23 +13,23 @@
     "__format": "biome format --write && biome check --write"
   },
   "dependencies": {
-    "@mastra/core": "^0.24.8",
-    "@mastra/libsql": "^0.16.4",
-    "@mastra/loggers": "^0.10.19",
-    "@mastra/memory": "^0.15.13",
-    "mastra": "^0.18.8",
+    "@mastra/core": "0.24.8",
+    "@mastra/libsql": "0.16.4",
+    "@mastra/loggers": "0.10.19",
+    "@mastra/memory": "0.15.13",
+    "mastra": "0.18.8",
     "next": "16.0.10",
     "react": "19.2.1",
     "react-dom": "19.2.1",
-    "zod": "^4.2.0"
+    "zod": "4.2.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "tailwindcss": "^4",
-    "typescript": "^5"
+    "@tailwindcss/postcss": "4",
+    "@types/node": "20",
+    "@types/react": "19",
+    "@types/react-dom": "19",
+    "tailwindcss": "4",
+    "typescript": "5"
   }
 }
