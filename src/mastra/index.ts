@@ -2,10 +2,11 @@ import { Mastra } from "@mastra/core/mastra";
 import { LibSQLStore } from "@mastra/libsql";
 import { PinoLogger } from "@mastra/loggers";
 
+import { followupQuestionAgent } from "./agents/followup-question-agent";
 import { weatherAgent } from "./agents/weather-agent";
 
 export const mastra = new Mastra({
-  agents: { weatherAgent },
+  agents: { followupQuestionAgent, weatherAgent },
   storage: new LibSQLStore({
     // stores observability, scores, ... into memory storage, if it needs to persist, change to file:../mastra.db
     url: ":memory:",
