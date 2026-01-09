@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import DailyLogForm from "./components/DailyLogForm";
 import LogoutButton from "./components/LogoutButton";
