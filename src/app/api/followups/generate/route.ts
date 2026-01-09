@@ -59,7 +59,7 @@ export async function POST(request: Request) {
     const result = await agent.generate(
       `以下のログ本文を元にフォローアップ質問を作成してください。\n\nログ本文:\n${parsedRequest.data.logText}`,
     );
-    const text = await result.text;
+    const text = result.text;
     const questions = parseQuestionsFromText(text);
 
     if (!questions) {

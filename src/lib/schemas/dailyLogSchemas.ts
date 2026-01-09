@@ -2,7 +2,7 @@ import { z } from "zod";
 
 /** フォローアップ質問のリストを検証するスキーマ。 */
 export const followupQuestionListSchema = z
-  .array(z.string().min(1))
+  .array(z.string().trim().min(1))
   .min(3)
   .max(5);
 

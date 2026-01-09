@@ -2,7 +2,8 @@
 
 import type { ChangeEvent } from "react";
 
-type TextInputWithLabelProps = {
+/** テキスト入力コンポーネントのプロパティ。 */
+export type TextInputWithLabelProps = {
   id: string;
   label: string;
   value: string;

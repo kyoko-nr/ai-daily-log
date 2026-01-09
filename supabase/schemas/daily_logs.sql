@@ -25,6 +25,13 @@ create policy "daily_logs_select_own" on public.daily_logs
 create policy "daily_logs_insert_own" on public.daily_logs
   for insert with check (auth.uid() = user_id);
 
+create policy "daily_logs_update_own" on public.daily_logs
+  for update using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+create policy "daily_logs_delete_own" on public.daily_logs
+  for delete using (auth.uid() = user_id);
+
 create policy "daily_log_followups_select_own" on public.daily_log_followups
   for select using (
     exists (
@@ -37,6 +44,34 @@ create policy "daily_log_followups_select_own" on public.daily_log_followups
 
 create policy "daily_log_followups_insert_own" on public.daily_log_followups
   for insert with check (
+    exists (
+      select 1
+      from public.daily_logs
+      where public.daily_logs.id = daily_log_followups.log_id
+        and public.daily_logs.user_id = auth.uid()
+    )
+  );
+
+create policy "daily_log_followups_update_own" on public.daily_log_followups
+  for update using (
+    exists (
+      select 1
+      from public.daily_logs
+      where public.daily_logs.id = daily_log_followups.log_id
+        and public.daily_logs.user_id = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from public.daily_logs
+      where public.daily_logs.id = daily_log_followups.log_id
+        and public.daily_logs.user_id = auth.uid()
+    )
+  );
+
+create policy "daily_log_followups_delete_own" on public.daily_log_followups
+  for delete using (
     exists (
       select 1
       from public.daily_logs

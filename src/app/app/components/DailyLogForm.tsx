@@ -1,8 +1,8 @@
 "use client";
 
-import { useDailyLogHooks } from "../hooks/useDailyLogHooks";
-import TextAreaWithLabel from "./TextAreaWithLabel";
-import TextInputWithLabel from "./TextInputWithLabel";
+import TextAreaWithLabel from "@/app/app/components/TextAreaWithLabel";
+import TextInputWithLabel from "@/app/app/components/TextInputWithLabel";
+import { useDailyLogHooks } from "@/app/app/hooks/useDailyLogHooks";
 
 const LOG_PLACEHOLDER =
   "今日やったこと、達成したこと、挑戦したこと、幸せだったこと、" +

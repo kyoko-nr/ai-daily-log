@@ -1,6 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
-import type { ZodTypeAny } from "zod";
+import type { ZodTypeAny, z } from "zod";
 
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -48,7 +48,7 @@ export const authenticate = async (): Promise<AuthResult> => {
 export const parseRequest = async <Schema extends ZodTypeAny>(
   schema: Schema,
   request: Request,
-): Promise<ParseResult<Schema["_output"]>> => {
+): Promise<ParseResult<z.output<Schema>>> => {
   let json: unknown;
 
   try {
