@@ -10,7 +10,8 @@
     "mastra:build": "mastra build --dir src/mastra",
     "fix": "npm run __lint && npm run __format",
     "__lint": "biome lint --write && tsc --noEmit",
-    "__format": "biome format --write && biome check --write"
+    "__format": "biome format --write && biome check --write",
+    "supabase:db:push": "supabase db push"
   },
   "dependencies": {
     "@mastra/core": "0.24.8",
