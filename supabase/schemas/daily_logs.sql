@@ -79,3 +79,39 @@ create policy "daily_log_followups_delete_own" on public.daily_log_followups
         and public.daily_logs.user_id = auth.uid()
     )
   );
+
+create or replace function public.create_daily_log_with_followups(
+  p_log_date date,
+  p_log_text text,
+  p_questions text[] default null,
+  p_answer text default null
+) returns uuid
+language plpgsql
+as $$
+declare
+  v_log_id uuid;
+begin
+  if auth.uid() is null then
+    raise exception 'Unauthorized';
+  end if;
+
+  insert into public.daily_logs (user_id, log_date, log_text)
+  values (auth.uid(), p_log_date, p_log_text)
+  returning id into v_log_id;
+
+  if
+    p_questions is not null
+    and array_length(p_questions, 1) is not null
+    and array_length(p_questions, 1) > 0
+  then
+    insert into public.daily_log_followups (log_id, question, answer)
+    values (
+      v_log_id,
+      array_to_string(p_questions, ','),
+      nullif(btrim(p_answer), '')
+    );
+  end if;
+
+  return v_log_id;
+end;
+$$;

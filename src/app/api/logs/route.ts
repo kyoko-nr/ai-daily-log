@@ -33,46 +33,29 @@ export async function POST(request: Request) {
   }
 
   const { logDate, logText, questions, answer } = parsedRequest.data;
-  const { supabase, user } = authResult;
-  const { data: logData, error: logError } = await supabase
-    .from("daily_logs")
-    .insert({
-      user_id: user.id,
-      log_date: logDate,
-      log_text: logText,
-    })
-    .select("id")
-    .single();
+  const { supabase } = authResult;
+  const normalizedQuestions = normalizeQuestions(questions);
 
-  if (logError || !logData) {
+  const normalizedAnswer = answer?.trim();
+  const { data: logId, error: logError } = await supabase.rpc(
+    "create_daily_log_with_followups",
+    {
+      p_log_date: logDate,
+      p_log_text: logText,
+      p_questions: normalizedQuestions,
+      p_answer:
+        normalizedAnswer && normalizedAnswer.length > 0
+          ? normalizedAnswer
+          : null,
+    },
+  );
+
+  if (logError || !logId) {
     return NextResponse.json(
       { message: "Failed to save log" },
       { status: 500 },
     );
   }
 
-  const normalizedQuestions = normalizeQuestions(questions);
-
-  if (normalizedQuestions) {
-    const normalizedAnswer = answer?.trim();
-    const { error: followupError } = await supabase
-      .from("daily_log_followups")
-      .insert({
-        log_id: logData.id,
-        question: normalizedQuestions.join(","),
-        answer:
-          normalizedAnswer && normalizedAnswer.length > 0
-            ? normalizedAnswer
-            : null,
-      });
-
-    if (followupError) {
-      return NextResponse.json(
-        { message: "Failed to save followup" },
-        { status: 500 },
-      );
-    }
-  }
-
-  return NextResponse.json({ logId: logData.id });
+  return NextResponse.json({ logId });
 }
