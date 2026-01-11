@@ -36,6 +36,14 @@ const buttonVariants = cva(
   },
 );
 
+/**
+ * ボタンコンポーネント。
+ * 様々なバリアントとサイズをサポートする。
+ *
+ * @param variant - ボタンのスタイルバリアント（default, destructive, outline, secondary, ghost, link）
+ * @param size - ボタンのサイズ（default, sm, lg, icon, icon-sm, icon-lg）
+ * @param asChild - trueの場合、子要素をそのままレンダリングする（Radix UIのSlotを使用）
+ */
 function Button({
   className,
   variant = "default",

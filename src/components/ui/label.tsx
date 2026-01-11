@@ -5,6 +5,11 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * ラベルコンポーネント。
+ * フォーム要素と関連付けるためのラベルを提供する。
+ * Radix UIのLabelコンポーネントをベースにしている。
+ */
 function Label({
   className,
   ...props

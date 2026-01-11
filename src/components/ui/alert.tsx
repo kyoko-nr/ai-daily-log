@@ -19,6 +19,12 @@ const alertVariants = cva(
   },
 );
 
+/**
+ * アラートコンポーネント。
+ * 重要な情報やエラーメッセージを表示するために使用する。
+ *
+ * @param variant - アラートのバリアント（default, destructive）
+ */
 function Alert({
   className,
   variant,
@@ -34,6 +40,10 @@ function Alert({
   );
 }
 
+/**
+ * アラートのタイトルコンポーネント。
+ * Alertコンポーネント内で使用し、アラートのタイトルを表示する。
+ */
 function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
@@ -47,6 +57,10 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
+/**
+ * アラートの説明コンポーネント。
+ * Alertコンポーネント内で使用し、アラートの詳細な説明を表示する。
+ */
 function AlertDescription({
   className,
   ...props

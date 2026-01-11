@@ -2,6 +2,10 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * テキストエリアコンポーネント。
+ * 複数行のテキスト入力をサポートし、アクセシビリティを考慮したスタイリングを提供する。
+ */
 function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return (
     <textarea

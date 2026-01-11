@@ -2,6 +2,10 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * テキスト入力コンポーネント。
+ * アクセシビリティとフォーカス状態を考慮したスタイリングを提供する。
+ */
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {
   return (
     <input
