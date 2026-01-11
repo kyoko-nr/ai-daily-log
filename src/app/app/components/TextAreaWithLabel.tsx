@@ -2,6 +2,11 @@
 
 import type { ChangeEvent } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
+
 type TextAreaWithLabelProps = {
   id: string;
   label: string;
@@ -24,17 +29,20 @@ export default function TextAreaWithLabel({
 }: TextAreaWithLabelProps) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-700" htmlFor={id}>
-        {label}
-      </label>
-      <textarea
+      <Label htmlFor={id}>{label}</Label>
+      <Textarea
         id={id}
-        className={`${minHeightClassName} w-full rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-zinc-400`}
+        className={cn(minHeightClassName)}
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        aria-invalid={errorMessage ? true : undefined}
       />
-      {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
+      {errorMessage && (
+        <Alert variant="destructive">
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }
