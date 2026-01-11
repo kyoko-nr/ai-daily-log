@@ -3,6 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase/client";
 
 /** ログアウトを実行するボタン。 */
@@ -36,15 +38,14 @@ export default function LogoutButton() {
 
   return (
     <div className="space-y-3">
-      <button
-        className="rounded-xl bg-zinc-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-        type="button"
-        onClick={logoutAction}
-        disabled={isPending}
-      >
+      <Button onClick={logoutAction} disabled={isPending}>
         Log out
-      </button>
-      {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
+      </Button>
+      {errorMessage && (
+        <Alert variant="destructive">
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }

@@ -1,5 +1,8 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useSignupHooks } from "../hooks/useSignupHooks";
 
 /** サインアップ入力フォームを表示する。 */
@@ -20,14 +23,8 @@ export default function SignupSection() {
       </p>
       <div className="mt-6 space-y-4">
         <div className="space-y-2">
-          <label
-            className="text-xs font-semibold uppercase tracking-wide text-zinc-500"
-            htmlFor="signup-email"
-          >
-            Email
-          </label>
-          <input
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-900"
+          <Label htmlFor="signup-email">Email</Label>
+          <Input
             type="email"
             name="email"
             id="signup-email"
@@ -38,14 +35,8 @@ export default function SignupSection() {
           />
         </div>
         <div className="space-y-2">
-          <label
-            className="text-xs font-semibold uppercase tracking-wide text-zinc-500"
-            htmlFor="signup-password"
-          >
-            Password
-          </label>
-          <input
-            className="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-sm outline-none focus:border-zinc-900"
+          <Label htmlFor="signup-password">Password</Label>
+          <Input
             type="password"
             name="password"
             id="signup-password"
@@ -55,14 +46,14 @@ export default function SignupSection() {
             required
           />
         </div>
-        <button
-          className="w-full rounded-xl border border-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-900 transition hover:bg-zinc-900 hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
-          type="button"
+        <Button
+          className="w-full"
+          variant="outline"
           onClick={onSubmit}
           disabled={isPending}
         >
           Create account
-        </button>
+        </Button>
       </div>
     </section>
   );

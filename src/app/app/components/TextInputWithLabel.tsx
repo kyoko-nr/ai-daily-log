@@ -2,6 +2,9 @@
 
 import type { ChangeEvent } from "react";
 
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 /** テキスト入力コンポーネントのプロパティ。 */
 export type TextInputWithLabelProps = {
   id: string;
@@ -21,16 +24,8 @@ export default function TextInputWithLabel({
 }: TextInputWithLabelProps) {
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium text-zinc-700" htmlFor={id}>
-        {label}
-      </label>
-      <input
-        id={id}
-        className="w-full rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm text-zinc-900 shadow-sm outline-none transition focus:border-zinc-400"
-        type={type}
-        value={value}
-        onChange={onChange}
-      />
+      <Label htmlFor={id}>{label}</Label>
+      <Input id={id} type={type} value={value} onChange={onChange} />
     </div>
   );
 }
