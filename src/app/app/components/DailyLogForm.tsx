@@ -3,6 +3,8 @@
 import TextAreaWithLabel from "@/app/app/components/TextAreaWithLabel";
 import TextInputWithLabel from "@/app/app/components/TextInputWithLabel";
 import { useDailyLogHooks } from "@/app/app/hooks/useDailyLogHooks";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 const LOG_PLACEHOLDER =
   "今日やったこと、達成したこと、挑戦したこと、幸せだったこと、" +
@@ -41,14 +43,9 @@ export default function DailyLogForm() {
             まずはログを書き、必要なら質問を生成して回答を追加できます。
           </p>
         </div>
-        <button
-          className="rounded-xl bg-zinc-900 px-5 py-2 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-60"
-          type="button"
-          onClick={handleSaveLog}
-          disabled={isSaveDisabled}
-        >
+        <Button onClick={handleSaveLog} disabled={isSaveDisabled}>
           {isSaving ? "保存中..." : "保存する"}
-        </button>
+        </Button>
       </div>
 
       <div className="grid gap-6">
@@ -71,14 +68,13 @@ export default function DailyLogForm() {
         />
 
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            className="rounded-xl border border-zinc-200 px-4 py-2 text-sm font-semibold text-zinc-700 transition hover:border-zinc-300 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
-            type="button"
+          <Button
+            variant="outline"
             onClick={handleGenerateQuestions}
             disabled={isGenerateDisabled}
           >
             {isGenerating ? "質問を生成中..." : "質問を生成"}
-          </button>
+          </Button>
           <p className="text-xs text-zinc-500">
             質問は回答欄に改行区切りでセットされます。
           </p>
@@ -93,9 +89,15 @@ export default function DailyLogForm() {
         />
       </div>
 
-      {errorMessage && <p className="text-sm text-red-600">{errorMessage}</p>}
+      {errorMessage && (
+        <Alert variant="destructive">
+          <AlertDescription>{errorMessage}</AlertDescription>
+        </Alert>
+      )}
       {successMessage && (
-        <p className="text-sm text-emerald-600">{successMessage}</p>
+        <Alert>
+          <AlertDescription>{successMessage}</AlertDescription>
+        </Alert>
       )}
     </section>
   );
