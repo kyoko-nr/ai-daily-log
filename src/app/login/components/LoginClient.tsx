@@ -1,5 +1,6 @@
 "use client";
 
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useNoticeHooks } from "../hooks/useNoticeHooks";
 import LoginSection from "./LoginSection";
 import ResetSection from "./ResetSection";
@@ -26,15 +27,9 @@ export default function LoginClient() {
         </header>
 
         {notice && (
-          <div className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm">
-            <p
-              className={
-                notice.type === "error" ? "text-red-600" : "text-emerald-600"
-              }
-            >
-              {notice.message}
-            </p>
-          </div>
+          <Alert variant={notice.type === "error" ? "destructive" : "default"}>
+            <AlertDescription>{notice.message}</AlertDescription>
+          </Alert>
         )}
 
         <div className="grid gap-6 lg:grid-cols-3">
