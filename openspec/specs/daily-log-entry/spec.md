@@ -10,11 +10,13 @@ TBD - created by archiving change add-daily-log-entry. Update Purpose after arch
 ログ本文入力のプレースホルダーは
 「今日やったこと、達成したこと、挑戦したこと、幸せだったこと、手助けしたことなどを書いてみよう」
 を使用することを SHALL とする。
+UIコンポーネントはshadcn/uiのコンポーネント（`Input`, `Textarea`, `Label`, `Button`）を使用することを SHALL とする。
 
 #### Scenario: 初期表示
 - **WHEN** 認証済みユーザーが `/app` を開く
 - **THEN** フォームが表示され、日付はローカル日付で初期化される
 - **AND** ログ本文に指定のプレースホルダーが表示される
+- **AND** shadcn/uiのコンポーネントが使用されている
 
 #### Scenario: 質問のセット
 - **WHEN** フォローアップ質問が生成される
