@@ -1,8 +1,4 @@
-# daily-log-entry Specification
-
-## Purpose
-TBD - created by archiving change add-daily-log-entry. Update Purpose after archive.
-## Requirements
+## MODIFIED Requirements
 ### Requirement: ログ作成フォーム
 システムは認証済みユーザー向けに `/` で日次ログ作成フォームを提供することを SHALL とする。
 フォームには日付入力（デフォルトはローカル日付）、ログ本文入力、「質問を生成」ボタン、
@@ -20,14 +16,6 @@ UIコンポーネントはshadcn/uiのコンポーネント（`Input`, `Textarea
 #### Scenario: 質問の表示
 - **WHEN** フォローアップ質問が生成される
 - **THEN** 質問の件数 N に対して、回答入力欄が N 個表示される
-
-### Requirement: 質問生成ボタンの無効化とエラー表示
-システムはログ本文が空の場合、「質問を生成」ボタンを無効化し、「ログを入力してください」というエラーメッセージを表示することを SHALL とする。
-
-#### Scenario: ログ未入力
-- **WHEN** ログ本文が空の状態で質問生成を試みる
-- **THEN** ボタンは無効で、エラーメッセージを表示する
-- **AND** 質問生成のリクエストは送信しない
 
 ### Requirement: 日次ログの保存
 システムは入力された日付、ログ本文、フォローアップ質問と回答を Supabase に保存することを SHALL とする。
@@ -50,6 +38,7 @@ UIコンポーネントはshadcn/uiのコンポーネント（`Input`, `Textarea
 - **WHEN** ユーザーが質問生成後に一部の質問を未回答のまま保存する
 - **THEN** 未回答の質問もフォローアップ行として保存される
 
+## ADDED Requirements
 ### Requirement: フォローアップ質問の削除
 システムは回答したくないフォローアップ質問を、❌ 操作で UI から削除できることを SHALL とする。
 削除した質問は保存対象から除外されることを SHALL とする。
@@ -58,4 +47,3 @@ UIコンポーネントはshadcn/uiのコンポーネント（`Input`, `Textarea
 - **WHEN** ユーザーが質問行の ❌ を押下する
 - **THEN** 質問の label と入力欄が UI から消える
 - **AND** 保存時にその質問は保存されない
-
