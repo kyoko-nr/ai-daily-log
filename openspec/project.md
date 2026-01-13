@@ -32,7 +32,7 @@
 
 ### テスト方針
 - まだテストフレームワークは未導入。
-- 現在の品質ゲートは `npm run __lint` (Biome + `tsc --noEmit`)。
+- 現在の品質ゲートは `npm run fix` (Biome + `tsc --noEmit`)。
 - 将来的に要約、保存、認証周りのテストを追加予定 (TBD)。
 
 ### Git ワークフロー
