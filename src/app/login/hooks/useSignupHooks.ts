@@ -65,7 +65,7 @@ export const useSignupHooks = (): SignupSectionProps => {
       }
 
       if (data.session) {
-        router.push("/app");
+        router.push("/");
         router.refresh();
         return;
       }
