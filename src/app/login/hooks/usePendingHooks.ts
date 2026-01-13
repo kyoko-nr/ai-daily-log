@@ -2,9 +2,12 @@
 
 import { useAtomValue, useSetAtom } from "jotai";
 
-import { changeIsPendingAction, isPendingAtom } from "../state/isPendingAtom";
+import {
+  changeIsPendingAction,
+  isPendingAtom,
+} from "@/app/state/isPendingAtom";
 
-/** 認証アクションの進行状態と更新関数を提供する。 */
+/** 処理の進行状態と更新関数を提供する。 */
 export const usePendingHooks = () => {
   const isPending = useAtomValue(isPendingAtom);
   const setIsPending = useSetAtom(changeIsPendingAction);
