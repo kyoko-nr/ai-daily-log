@@ -24,6 +24,18 @@ export const dailyLogCreateRequestSchema = z.object({
   answer: z.string().optional().nullable(),
 });
 
+/** 日次ログ一覧アイテムのスキーマ。 */
+export const dailyLogListItemSchema = z.object({
+  id: z.uuid(),
+  logDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  logText: z.string(),
+});
+
+/** 日次ログ一覧レスポンスのスキーマ。 */
+export const dailyLogListResponseSchema = z.object({
+  logs: z.array(dailyLogListItemSchema),
+});
+
 /** フォローアップ質問生成リクエストの型。 */
 export type FollowupGenerateRequest = z.infer<
   typeof followupGenerateRequestSchema
@@ -36,3 +48,9 @@ export type FollowupGenerateResponse = z.infer<
 
 /** 日次ログ保存リクエストの型。 */
 export type DailyLogCreateRequest = z.infer<typeof dailyLogCreateRequestSchema>;
+
+/** 日次ログ一覧アイテムの型。 */
+export type DailyLogListItem = z.infer<typeof dailyLogListItemSchema>;
+
+/** 日次ログ一覧レスポンスの型。 */
+export type DailyLogListResponse = z.infer<typeof dailyLogListResponseSchema>;
