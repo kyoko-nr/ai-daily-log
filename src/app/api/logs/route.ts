@@ -3,14 +3,19 @@ import { NextResponse } from "next/server";
 import { authenticate, parseRequest } from "@/lib/api/requestUtils";
 import { dailyLogCreateRequestSchema } from "@/lib/schemas/dailyLogSchemas";
 
-const normalizeQuestions = (questions?: string[] | null) => {
-  if (!questions) {
+const normalizeFollowups = (
+  followups?: { question: string; answer: string }[] | null,
+) => {
+  if (!followups) {
     return null;
   }
 
-  const normalized = questions
-    .map((question) => question.trim())
-    .filter(Boolean);
+  const normalized = followups
+    .map((followup) => ({
+      question: followup.question.trim(),
+      answer: followup.answer.trim(),
+    }))
+    .filter((followup) => followup.question.length > 0);
 
   return normalized.length > 0 ? normalized : null;
 };
@@ -32,21 +37,15 @@ export async function POST(request: Request) {
     return parsedRequest.response;
   }
 
-  const { logDate, logText, questions, answer } = parsedRequest.data;
+  const { logDate, logText, followups } = parsedRequest.data;
   const { supabase } = authResult;
-  const normalizedQuestions = normalizeQuestions(questions);
-
-  const normalizedAnswer = answer?.trim();
+  const normalizedFollowups = normalizeFollowups(followups);
   const { data: logId, error: logError } = await supabase.rpc(
     "create_daily_log_with_followups",
     {
       p_log_date: logDate,
       p_log_text: logText,
-      p_questions: normalizedQuestions,
-      p_answer:
-        normalizedAnswer && normalizedAnswer.length > 0
-          ? normalizedAnswer
-          : null,
+      p_followups: normalizedFollowups,
     },
   );
 
