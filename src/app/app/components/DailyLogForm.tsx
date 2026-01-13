@@ -1,5 +1,6 @@
 "use client";
 
+import FollowUpInput from "@/app/app/components/FollowUpInput";
 import TextAreaWithLabel from "@/app/app/components/TextAreaWithLabel";
 import TextInputWithLabel from "@/app/app/components/TextInputWithLabel";
 import { useDailyLogHooks } from "@/app/app/hooks/useDailyLogHooks";
@@ -15,7 +16,7 @@ export default function DailyLogForm() {
   const {
     logDate,
     logText,
-    answerText,
+    followups,
     errorMessage,
     successMessage,
     isLogEmpty,
@@ -25,7 +26,8 @@ export default function DailyLogForm() {
     isSaving,
     handleLogDateChange,
     handleLogTextChange,
-    handleAnswerChange,
+    handleFollowupAnswerChange,
+    handleRemoveFollowup,
     handleGenerateQuestions,
     handleSaveLog,
   } = useDailyLogHooks();
@@ -75,18 +77,15 @@ export default function DailyLogForm() {
           >
             {isGenerating ? "質問を生成中..." : "質問を生成"}
           </Button>
-          <p className="text-xs text-zinc-500">
-            質問は回答欄に改行区切りでセットされます。
-          </p>
         </div>
 
-        <TextAreaWithLabel
-          id="daily-answer"
-          label="回答"
-          value={answerText}
-          placeholder="質問が生成されるとここに表示されます"
-          onChange={handleAnswerChange}
-        />
+        {followups.length > 0 && (
+          <FollowUpInput
+            followups={followups}
+            onRemoveFollowup={handleRemoveFollowup}
+            onAnswerChange={handleFollowupAnswerChange}
+          />
+        )}
       </div>
 
       {errorMessage && (
