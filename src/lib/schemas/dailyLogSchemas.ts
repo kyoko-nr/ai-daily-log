@@ -16,12 +16,17 @@ export const followupGenerateResponseSchema = z.object({
   questions: followupQuestionListSchema,
 });
 
+/** フォローアップ質問の回答アイテムを検証するスキーマ。 */
+export const followupAnswerItemSchema = z.object({
+  question: z.string().trim().min(1),
+  answer: z.string().trim().optional().default(""),
+});
+
 /** 日次ログ保存のリクエストスキーマ。 */
 export const dailyLogCreateRequestSchema = z.object({
   logDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   logText: z.string().trim().min(1),
-  questions: followupQuestionListSchema.optional().nullable(),
-  answer: z.string().optional().nullable(),
+  followups: z.array(followupAnswerItemSchema).optional().nullable(),
 });
 
 /** 日次ログ一覧アイテムのスキーマ。 */
@@ -45,6 +50,9 @@ export type FollowupGenerateRequest = z.infer<
 export type FollowupGenerateResponse = z.infer<
   typeof followupGenerateResponseSchema
 >;
+
+/** フォローアップ質問の回答アイテムの型。 */
+export type FollowupAnswerItem = z.infer<typeof followupAnswerItemSchema>;
 
 /** 日次ログ保存リクエストの型。 */
 export type DailyLogCreateRequest = z.infer<typeof dailyLogCreateRequestSchema>;

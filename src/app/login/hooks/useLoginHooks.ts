@@ -64,7 +64,7 @@ export const useLoginHooks = (): LoginSectionProps => {
         return;
       }
 
-      router.push("/app");
+      router.push("/");
       router.refresh();
     } finally {
       setIsPending(false);

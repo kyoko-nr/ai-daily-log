@@ -60,12 +60,25 @@ const normalizeGeneratedQuestions = (questions: string[]) =>
     .map(normalizeGeneratedQuestion)
     .filter((question): question is string => Boolean(question));
 
+type FollowupDraft = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
+const createFollowupDraftId = () => {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    return `${Date.now()}-${Math.random()}`;
+  }
+};
+
 /** 日次ログ作成フォームの状態と操作を提供する。 */
 export const useDailyLogHooks = () => {
   const [logDate, setLogDate] = useState(() => getLocalDate());
   const [logText, setLogText] = useState("");
-  const [answerText, setAnswerText] = useState("");
-  const [questions, setQuestions] = useState<string[] | null>(null);
+  const [followups, setFollowups] = useState<FollowupDraft[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -89,12 +102,24 @@ export const useDailyLogHooks = () => {
     [],
   );
 
-  const handleAnswerChange = useCallback(
-    (event: ChangeEvent<HTMLTextAreaElement>) => {
-      setAnswerText(event.target.value);
+  const handleFollowupAnswerChange = useCallback(
+    (followupId: string) => (event: ChangeEvent<HTMLTextAreaElement>) => {
+      setFollowups((previousFollowups) =>
+        previousFollowups.map((followup) =>
+          followup.id === followupId
+            ? { ...followup, answer: event.target.value }
+            : followup,
+        ),
+      );
     },
     [],
   );
+
+  const handleRemoveFollowup = useCallback((followupId: string) => {
+    setFollowups((previousFollowups) =>
+      previousFollowups.filter((followup) => followup.id !== followupId),
+    );
+  }, []);
 
   const handleGenerateQuestions = useCallback(async () => {
     if (isGenerating) {
@@ -129,8 +154,13 @@ export const useDailyLogHooks = () => {
 
       const data = (await response.json()) as FollowupGenerateResponse;
       const normalizedQuestions = normalizeGeneratedQuestions(data.questions);
-      setQuestions(normalizedQuestions.length > 0 ? normalizedQuestions : null);
-      setAnswerText(normalizedQuestions.join("\n\n"));
+      setFollowups(
+        normalizedQuestions.map((question) => ({
+          id: createFollowupDraftId(),
+          question,
+          answer: "",
+        })),
+      );
     } catch {
       setErrorMessage(DEFAULT_GENERATE_ERROR_MESSAGE);
     } finally {
@@ -157,8 +187,13 @@ export const useDailyLogHooks = () => {
       const payload: DailyLogCreateRequest = {
         logDate,
         logText: logText.trim(),
-        questions,
-        answer: answerText.trim().length > 0 ? answerText.trim() : null,
+        followups:
+          followups.length > 0
+            ? followups.map((followup) => ({
+                question: followup.question.trim(),
+                answer: followup.answer.trim(),
+              }))
+            : null,
       };
       const response = await fetch("/api/logs", {
         method: "POST",
@@ -178,12 +213,12 @@ export const useDailyLogHooks = () => {
     } finally {
       setIsSaving(false);
     }
-  }, [answerText, isLogEmpty, isSaving, logDate, logText, questions]);
+  }, [followups, isLogEmpty, isSaving, logDate, logText]);
 
   return {
     logDate,
     logText,
-    answerText,
+    followups,
     errorMessage,
     successMessage,
     isLogEmpty,
@@ -193,7 +228,8 @@ export const useDailyLogHooks = () => {
     isSaving,
     handleLogDateChange,
     handleLogTextChange,
-    handleAnswerChange,
+    handleFollowupAnswerChange,
+    handleRemoveFollowup,
     handleGenerateQuestions,
     handleSaveLog,
   };
