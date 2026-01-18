@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-import { getLogDetailHooks } from "../hooks/getLogDetailHooks";
+import { getLogDetail } from "../hooks/getLogDetail";
 
 type LogDetailPageProps = {
   params:
@@ -28,7 +28,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
     redirect("/login");
   }
 
-  const log = await getLogDetailHooks({
+  const log = await getLogDetail({
     supabase,
     logId: resolvedParams.logId,
   });

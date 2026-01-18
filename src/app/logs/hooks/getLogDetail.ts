@@ -32,7 +32,7 @@ export type DailyLogDetail = Omit<DailyLogRow, "log_date" | "log_text"> & {
 const logIdSchema = z.uuid();
 
 /** ログ詳細ページの状態（対象ログとフォローアップ）を取得する。 */
-export const getLogDetailHooks = async ({
+export const getLogDetail = async ({
   supabase,
   logId,
 }: {
