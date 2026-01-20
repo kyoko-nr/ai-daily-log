@@ -16,7 +16,7 @@ export default function LogsError({ error, reset }: LogsErrorProps) {
     if (process.env.NODE_ENV !== "production") {
       console.error(error);
     }
-    // TODO: Send to error tracking service (e.g., Sentry) in production
+    // TODO: 本番環境ではエラー追跡サービス（Sentry等）に送信する
   }, [error]);
 
   return (

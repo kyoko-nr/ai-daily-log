@@ -2,9 +2,9 @@
 
 import { atom } from "jotai";
 
-// TODO: #9 - Consider refactoring to prevent race conditions
-// Current implementation uses a shared counter which could become incorrect
-// if multiple operations are triggered rapidly. See issue for suggested solutions.
+// TODO: #9 - 競合状態を防ぐためのリファクタリングを検討
+// 現在の実装は共有カウンターを使用しており、複数の操作が急速に
+// トリガーされた場合に不正確になる可能性がある。解決策はIssueを参照。
 const pendingCountAtom = atom(0);
 
 /** 処理の進行状態を保持する atom。 */

@@ -51,7 +51,7 @@ export default async function LogDetailPage({ params }: LogDetailPageProps) {
 
         <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-6 shadow-sm">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-            {/* TODO: #10 - Implement delete and edit functionality */}
+            {/* TODO: #10 - 削除・編集機能を実装する */}
             <div className="flex items-center gap-2">
               <Button variant="destructive" disabled>
                 削除
