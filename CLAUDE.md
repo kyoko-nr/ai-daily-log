@@ -16,3 +16,9 @@ Use `@/openspec/AGENTS.md` to learn:
 Keep this managed block so 'openspec update' can refresh the instructions.
 
 <!-- OPENSPEC:END -->
+
+# コーディング規約
+
+## コメント・ドキュメント
+
+- JSDoc、コメント、TODOコメントは必ず日本語で記述すること

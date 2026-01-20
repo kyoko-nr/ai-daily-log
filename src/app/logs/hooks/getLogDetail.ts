@@ -52,11 +52,8 @@ export const getLogDetail = async ({
     .maybeSingle();
 
   if (logError) {
-    const message =
-      process.env.NODE_ENV === "production"
-        ? "Failed to load log"
-        : `Failed to load log: ${logError.message}`;
-    throw new Error(message);
+    console.error("Failed to load log:", logError);
+    throw new Error("Failed to load log");
   }
 
   if (!logRow) {
@@ -78,11 +75,8 @@ export const getLogDetail = async ({
     .order("id", { ascending: true });
 
   if (followupError) {
-    const message =
-      process.env.NODE_ENV === "production"
-        ? "Failed to load followups"
-        : `Failed to load followups: ${followupError.message}`;
-    throw new Error(message);
+    console.error("Failed to load followups:", followupError);
+    throw new Error("Failed to load followups");
   }
 
   const parsedFollowupRows = z

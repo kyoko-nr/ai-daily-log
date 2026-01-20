@@ -21,7 +21,13 @@ export default function LoginSection() {
       <p className="mt-2 text-sm text-zinc-600">
         Welcome back. Enter your credentials.
       </p>
-      <div className="mt-6 space-y-4">
+      <form
+        className="mt-6 space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <div className="space-y-2">
           <Label htmlFor="login-email">Email</Label>
           <Input
@@ -46,10 +52,10 @@ export default function LoginSection() {
             required
           />
         </div>
-        <Button className="w-full" onClick={onSubmit} disabled={isPending}>
+        <Button type="submit" className="w-full" disabled={isPending}>
           Log in
         </Button>
-      </div>
+      </form>
     </section>
   );
 }

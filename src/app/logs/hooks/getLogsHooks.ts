@@ -98,11 +98,8 @@ export const getLogsHooks = async ({
       error.code === "22023" && error.message.includes("Invalid yearMonth");
 
     if (!shouldFallback) {
-      const message =
-        process.env.NODE_ENV === "production"
-          ? "Failed to load logs"
-          : `Failed to load logs: ${error.message}`;
-      throw new Error(message);
+      console.error("Failed to load logs:", error);
+      throw new Error("Failed to load logs");
     }
 
     const { startDate, endDate } = toMonthRange(resolvedYearMonth);
@@ -115,11 +112,8 @@ export const getLogsHooks = async ({
       .order("created_at", { ascending: false });
 
     if (fallbackError) {
-      const message =
-        process.env.NODE_ENV === "production"
-          ? "Failed to load logs"
-          : `Failed to load logs: ${fallbackError.message}`;
-      throw new Error(message);
+      console.error("Failed to load logs:", fallbackError);
+      throw new Error("Failed to load logs");
     }
 
     const rows = (fallbackData ?? []) as DailyLogRow[];
