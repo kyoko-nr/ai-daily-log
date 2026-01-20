@@ -9,6 +9,8 @@ import { supabase } from "@/lib/supabase/client";
 import { useNoticeHooks } from "./useNoticeHooks";
 import { usePendingHooks } from "./usePendingHooks";
 
+const MIN_PASSWORD_LENGTH = 8;
+
 type SignupSectionProps = {
   email: string;
   password: string;
@@ -46,6 +48,14 @@ export const useSignupHooks = (): SignupSectionProps => {
       setNotice({
         type: "error",
         message: "Email and password are required",
+      });
+      return;
+    }
+
+    if (password.length < MIN_PASSWORD_LENGTH) {
+      setNotice({
+        type: "error",
+        message: `Password must be at least ${MIN_PASSWORD_LENGTH} characters`,
       });
       return;
     }

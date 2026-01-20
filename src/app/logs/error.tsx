@@ -13,7 +13,10 @@ type LogsErrorProps = {
 /** 過去ログ一覧ページのエラーを表示する。 */
 export default function LogsError({ error, reset }: LogsErrorProps) {
   useEffect(() => {
-    console.error(error);
+    if (process.env.NODE_ENV !== "production") {
+      console.error(error);
+    }
+    // TODO: Send to error tracking service (e.g., Sentry) in production
   }, [error]);
 
   return (
