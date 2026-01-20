@@ -10,7 +10,10 @@ type GlobalErrorProps = {
   reset: () => void;
 };
 
-/** アプリ全体のエラーを表示する。 */
+/**
+ * アプリ全体のエラーを表示する。
+ * TODO: #13 - 引数のerrorの妥当性。画面に表示しても問題ないエラー文言のみ表示させるようにすること。
+ */
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
     if (process.env.NODE_ENV !== "production") {
