@@ -21,7 +21,13 @@ export default function SignupSection() {
       <p className="mt-2 text-sm text-zinc-600">
         Create a new account with your email.
       </p>
-      <div className="mt-6 space-y-4">
+      <form
+        className="mt-6 space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <div className="space-y-2">
           <Label htmlFor="signup-email">Email</Label>
           <Input
@@ -47,14 +53,14 @@ export default function SignupSection() {
           />
         </div>
         <Button
+          type="submit"
           className="w-full"
           variant="outline"
-          onClick={onSubmit}
           disabled={isPending}
         >
           Create account
         </Button>
-      </div>
+      </form>
     </section>
   );
 }

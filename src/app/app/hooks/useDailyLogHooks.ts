@@ -208,6 +208,9 @@ export const useDailyLogHooks = () => {
       }
 
       setSuccessMessage("保存しました");
+      setLogText("");
+      setFollowups([]);
+      setLogDate(getLocalDate());
     } catch {
       setErrorMessage(DEFAULT_ERROR_MESSAGE);
     } finally {
