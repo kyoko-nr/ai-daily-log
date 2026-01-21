@@ -1,4 +1,7 @@
-/** 過去ログ一覧ページのローディング表示。 */
+// TODO: 仮実装。正式なスケルトン UI に置き換える（GitHub issue #14）
+/**
+ * 過去ログ一覧ページのローディング表示。
+ */
 export default function LogsLoading() {
   return (
     <div className="min-h-screen bg-white px-6 py-16">
@@ -10,12 +13,9 @@ export default function LogsLoading() {
             <div className="h-4 w-48 rounded bg-zinc-200" />
           </div>
           <div className="space-y-4">
-            {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="h-24 rounded-2xl border border-zinc-200 bg-zinc-50"
-              />
-            ))}
+            <div className="h-24 rounded-2xl border border-zinc-200 bg-zinc-50" />
+            <div className="h-24 rounded-2xl border border-zinc-200 bg-zinc-50" />
+            <div className="h-24 rounded-2xl border border-zinc-200 bg-zinc-50" />
           </div>
         </div>
       </main>
