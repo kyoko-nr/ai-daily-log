@@ -2,6 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+import { getCurrentYearMonth, shiftMonth, toMonthRange } from "@/lib/date";
 import {
   type DailyLogListItem,
   dailyLogListResponseSchema,
@@ -22,14 +23,6 @@ const yearMonthSchema = z
   .pipe(z.iso.date())
   .transform((value) => value.slice(0, 7));
 
-const getCurrentYearMonth = () => {
-  const now = new Date();
-  const year = now.getUTCFullYear();
-  const month = `${now.getUTCMonth() + 1}`.padStart(2, "0");
-
-  return `${year}-${month}`;
-};
-
 const resolveYearMonth = (yearMonth: string | string[] | undefined) => {
   if (!yearMonth) {
     return getCurrentYearMonth();
@@ -41,32 +34,6 @@ const resolveYearMonth = (yearMonth: string | string[] | undefined) => {
 
   const parsedYearMonth = yearMonthSchema.safeParse(yearMonth);
   return parsedYearMonth.success ? parsedYearMonth.data : null;
-};
-
-const shiftMonth = (yearMonth: string, delta: number) => {
-  const [yearText, monthText] = yearMonth.split("-");
-  const year = Number(yearText);
-  const month = Number(monthText);
-  const targetMonth = new Date(Date.UTC(year, month - 1, 1));
-
-  targetMonth.setUTCMonth(targetMonth.getUTCMonth() + delta);
-
-  const shiftedYear = targetMonth.getUTCFullYear();
-  const shiftedMonth = `${targetMonth.getUTCMonth() + 1}`.padStart(2, "0");
-  return `${shiftedYear}-${shiftedMonth}`;
-};
-
-const toMonthRange = (yearMonth: string) => {
-  const [yearText, monthText] = yearMonth.split("-");
-  const year = Number(yearText);
-  const month = Number(monthText);
-  const start = new Date(Date.UTC(year, month - 1, 1));
-  const end = new Date(Date.UTC(year, month, 1));
-
-  return {
-    startDate: start.toISOString().slice(0, 10),
-    endDate: end.toISOString().slice(0, 10),
-  };
 };
 
 /** 過去ログ一覧ページの状態（対象月やログ一覧）を取得する。 */

@@ -5,67 +5,7 @@ import { NextResponse } from "next/server";
 import { getLastWeekMonday } from "@/lib/date";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { mastra } from "@/mastra";
-
-// ============================================================================
-// 型定義
-// ============================================================================
-
-interface Followup {
-  question: string;
-  answer: string;
-}
-
-interface LogWithFollowups {
-  log_id: string;
-  log_date: string;
-  log_text: string;
-  followups: Followup[];
-}
-
-interface UserForSummary {
-  user_id: string;
-  log_count: number;
-}
-
-interface SummaryResult {
-  userId: string;
-  success: boolean;
-  error?: string;
-}
-
-// ============================================================================
-// 型ガード
-// ============================================================================
-
-/** UserForSummary 配列かどうかを検証する型ガード。 */
-const isUserForSummaryArray = (data: unknown): data is UserForSummary[] => {
-  return (
-    Array.isArray(data) &&
-    data.every(
-      (item) =>
-        typeof item === "object" &&
-        item !== null &&
-        "user_id" in item &&
-        "log_count" in item,
-    )
-  );
-};
-
-/** LogWithFollowups 配列かどうかを検証する型ガード。 */
-const isLogWithFollowupsArray = (data: unknown): data is LogWithFollowups[] => {
-  return (
-    Array.isArray(data) &&
-    data.every(
-      (item) =>
-        typeof item === "object" &&
-        item !== null &&
-        "log_id" in item &&
-        "log_date" in item &&
-        "log_text" in item &&
-        "followups" in item,
-    )
-  );
-};
+import type { LogWithFollowups, SummaryResult, UserForSummary } from "./types";
 
 // ============================================================================
 // ユーティリティ関数
@@ -115,7 +55,7 @@ const fetchEligibleUsers = async (
     return { users: null, error: "Failed to get users" };
   }
 
-  if (!isUserForSummaryArray(data) || data.length === 0) {
+  if (data.length === 0) {
     return { users: null, error: null };
   }
 
@@ -139,11 +79,7 @@ const generateSummaryForUser = async (
     { p_user_id: user.user_id, p_week_start: weekStart },
   );
 
-  if (
-    logsError ||
-    !isLogWithFollowupsArray(logsData) ||
-    logsData.length === 0
-  ) {
+  if (logsError || logsData.length === 0) {
     return {
       userId: user.user_id,
       success: false,
