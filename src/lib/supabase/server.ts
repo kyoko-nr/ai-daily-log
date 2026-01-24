@@ -25,6 +25,11 @@ export const createSupabaseServerClient = async () => {
         }
       },
     },
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
   });
 };
 
