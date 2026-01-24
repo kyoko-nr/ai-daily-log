@@ -2,6 +2,7 @@ import type { Agent } from "@mastra/core/agent";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
 
+import { getLastWeekMonday } from "@/lib/date";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { mastra } from "@/mastra";
 
@@ -69,23 +70,6 @@ const isLogWithFollowupsArray = (data: unknown): data is LogWithFollowups[] => {
 // ============================================================================
 // ユーティリティ関数
 // ============================================================================
-
-/** 前週の月曜日を取得する（イミュータブル）。 */
-const getLastWeekMonday = (): string => {
-  const today = new Date();
-  const dayOfWeek = today.getUTCDay();
-  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  const daysToLastMonday = daysToMonday + 7;
-  const lastMonday = new Date(
-    Date.UTC(
-      today.getUTCFullYear(),
-      today.getUTCMonth(),
-      today.getUTCDate() - daysToLastMonday,
-    ),
-  );
-
-  return lastMonday.toISOString().split("T")[0];
-};
 
 /** ログデータをプロンプト用のテキストに整形する。 */
 const formatLogsForPrompt = (logs: LogWithFollowups[]): string => {
