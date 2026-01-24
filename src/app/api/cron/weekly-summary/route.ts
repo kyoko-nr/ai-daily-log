@@ -73,13 +73,15 @@ const isLogWithFollowupsArray = (data: unknown): data is LogWithFollowups[] => {
 /** 前週の月曜日を取得する（イミュータブル）。 */
 const getLastWeekMonday = (): string => {
   const today = new Date();
-  const dayOfWeek = today.getDay();
+  const dayOfWeek = today.getUTCDay();
   const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
   const daysToLastMonday = daysToMonday + 7;
   const lastMonday = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() - daysToLastMonday,
+    Date.UTC(
+      today.getUTCFullYear(),
+      today.getUTCMonth(),
+      today.getUTCDate() - daysToLastMonday,
+    ),
   );
 
   return lastMonday.toISOString().split("T")[0];
