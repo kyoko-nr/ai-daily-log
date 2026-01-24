@@ -1,11 +1,18 @@
 import type { Agent } from "@mastra/core/agent";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 import { getLastWeekMonday } from "@/lib/date";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { mastra } from "@/mastra";
-import type { LogWithFollowups, SummaryResult, UserForSummary } from "./types";
+import {
+  type LogWithFollowups,
+  LogWithFollowupsSchema,
+  type SummaryResult,
+  type UserForSummary,
+  UserForSummarySchema,
+} from "./types";
 
 // ============================================================================
 // ユーティリティ関数
@@ -55,11 +62,18 @@ const fetchEligibleUsers = async (
     return { users: null, error: "Failed to get users" };
   }
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     return { users: null, error: null };
   }
 
-  return { users: data, error: null };
+  // RPC戻り値の型検証
+  const parseResult = z.array(UserForSummarySchema).safeParse(data);
+  if (!parseResult.success) {
+    console.error("Invalid user data from RPC:", parseResult.error);
+    return { users: null, error: "Invalid user data format" };
+  }
+
+  return { users: parseResult.data, error: null };
 };
 
 // ============================================================================
@@ -79,7 +93,7 @@ const generateSummaryForUser = async (
     { p_user_id: user.user_id, p_week_start: weekStart },
   );
 
-  if (logsError || logsData.length === 0) {
+  if (logsError) {
     return {
       userId: user.user_id,
       success: false,
@@ -87,8 +101,28 @@ const generateSummaryForUser = async (
     };
   }
 
+  // RPC戻り値の型検証
+  const parseResult = z.array(LogWithFollowupsSchema).safeParse(logsData);
+  if (!parseResult.success) {
+    console.error("Invalid logs data from RPC:", parseResult.error);
+    return {
+      userId: user.user_id,
+      success: false,
+      error: "Invalid logs data format",
+    };
+  }
+
+  const logs = parseResult.data;
+  if (logs.length === 0) {
+    return {
+      userId: user.user_id,
+      success: false,
+      error: "No logs found",
+    };
+  }
+
   // AI でサマリーを生成
-  const logsText = formatLogsForPrompt(logsData);
+  const logsText = formatLogsForPrompt(logs);
   const prompt = `以下は${weekStart}の週（月曜〜日曜）の活動ログです。これを基に週次サマリーを作成してください。\n\n${logsText}`;
   const response = await agent.generate(prompt);
   const summaryText = typeof response.text === "string" ? response.text : "";
