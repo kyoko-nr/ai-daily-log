@@ -1,91 +1,22 @@
 import type { Agent } from "@mastra/core/agent";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
+import { getLastWeekMonday } from "@/lib/date";
 import { createSupabaseServiceClient } from "@/lib/supabase/server";
 import { mastra } from "@/mastra";
-
-// ============================================================================
-// 型定義
-// ============================================================================
-
-interface Followup {
-  question: string;
-  answer: string;
-}
-
-interface LogWithFollowups {
-  log_id: string;
-  log_date: string;
-  log_text: string;
-  followups: Followup[];
-}
-
-interface UserForSummary {
-  user_id: string;
-  log_count: number;
-}
-
-interface SummaryResult {
-  userId: string;
-  success: boolean;
-  error?: string;
-}
-
-// ============================================================================
-// 型ガード
-// ============================================================================
-
-/** UserForSummary 配列かどうかを検証する型ガード。 */
-const isUserForSummaryArray = (data: unknown): data is UserForSummary[] => {
-  return (
-    Array.isArray(data) &&
-    data.every(
-      (item) =>
-        typeof item === "object" &&
-        item !== null &&
-        "user_id" in item &&
-        "log_count" in item,
-    )
-  );
-};
-
-/** LogWithFollowups 配列かどうかを検証する型ガード。 */
-const isLogWithFollowupsArray = (data: unknown): data is LogWithFollowups[] => {
-  return (
-    Array.isArray(data) &&
-    data.every(
-      (item) =>
-        typeof item === "object" &&
-        item !== null &&
-        "log_id" in item &&
-        "log_date" in item &&
-        "log_text" in item &&
-        "followups" in item,
-    )
-  );
-};
+import {
+  type LogWithFollowups,
+  LogWithFollowupsSchema,
+  type SummaryResult,
+  type UserForSummary,
+  UserForSummarySchema,
+} from "./types";
 
 // ============================================================================
 // ユーティリティ関数
 // ============================================================================
-
-/** 前週の月曜日を取得する（イミュータブル）。 */
-const getLastWeekMonday = (): string => {
-  const today = new Date();
-  const dayOfWeek = today.getUTCDay();
-  const daysToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  const daysToLastMonday = daysToMonday + 7;
-  const lastMonday = new Date(
-    Date.UTC(
-      today.getUTCFullYear(),
-      today.getUTCMonth(),
-      today.getUTCDate() - daysToLastMonday,
-    ),
-  );
-
-  return lastMonday.toISOString().split("T")[0];
-};
 
 /** ログデータをプロンプト用のテキストに整形する。 */
 const formatLogsForPrompt = (logs: LogWithFollowups[]): string => {
@@ -131,11 +62,18 @@ const fetchEligibleUsers = async (
     return { users: null, error: "Failed to get users" };
   }
 
-  if (!isUserForSummaryArray(data) || data.length === 0) {
+  if (!data || data.length === 0) {
     return { users: null, error: null };
   }
 
-  return { users: data, error: null };
+  // RPC戻り値の型検証
+  const parseResult = z.array(UserForSummarySchema).safeParse(data);
+  if (!parseResult.success) {
+    console.error("Invalid user data from RPC:", parseResult.error);
+    return { users: null, error: "Invalid user data format" };
+  }
+
+  return { users: parseResult.data, error: null };
 };
 
 // ============================================================================
@@ -155,11 +93,7 @@ const generateSummaryForUser = async (
     { p_user_id: user.user_id, p_week_start: weekStart },
   );
 
-  if (
-    logsError ||
-    !isLogWithFollowupsArray(logsData) ||
-    logsData.length === 0
-  ) {
+  if (logsError) {
     return {
       userId: user.user_id,
       success: false,
@@ -167,8 +101,28 @@ const generateSummaryForUser = async (
     };
   }
 
+  // RPC戻り値の型検証
+  const parseResult = z.array(LogWithFollowupsSchema).safeParse(logsData);
+  if (!parseResult.success) {
+    console.error("Invalid logs data from RPC:", parseResult.error);
+    return {
+      userId: user.user_id,
+      success: false,
+      error: "Invalid logs data format",
+    };
+  }
+
+  const logs = parseResult.data;
+  if (logs.length === 0) {
+    return {
+      userId: user.user_id,
+      success: false,
+      error: "No logs found",
+    };
+  }
+
   // AI でサマリーを生成
-  const logsText = formatLogsForPrompt(logsData);
+  const logsText = formatLogsForPrompt(logs);
   const prompt = `以下は${weekStart}の週（月曜〜日曜）の活動ログです。これを基に週次サマリーを作成してください。\n\n${logsText}`;
   const response = await agent.generate(prompt);
   const summaryText = typeof response.text === "string" ? response.text : "";

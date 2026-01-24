@@ -3,6 +3,7 @@
 import type { ChangeEvent } from "react";
 import { useCallback, useMemo, useState } from "react";
 
+import { getLocalDate } from "@/lib/date";
 import type {
   DailyLogCreateRequest,
   FollowupGenerateResponse,
@@ -10,15 +11,6 @@ import type {
 
 const DEFAULT_ERROR_MESSAGE = "保存に失敗しました";
 const DEFAULT_GENERATE_ERROR_MESSAGE = "質問生成に失敗しました";
-
-const getLocalDate = () => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = `${now.getMonth() + 1}`.padStart(2, "0");
-  const day = `${now.getDate()}`.padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
-};
 
 const readErrorMessage = async (response: Response, fallback: string) => {
   try {
